@@ -6,7 +6,38 @@ var fiveContainer = document.querySelector('.five-day-container')
 searchBtn.addEventListener('click', function () {
     var searchedCity = document.querySelector('.input-value').value
     getCurrentWeather(searchedCity)
+    saveHistory(searchedCity)
 })
+
+function saveHistory(value) {
+    var storage = JSON.parse(localStorage.getItem('weatherHistory'))
+    if (storage === null) {
+        storage = []
+    }
+    storage.push(value)
+    localStorage.setItem('weatherHistory', JSON.stringify(storage))
+    getWeatherHistory()
+}
+
+getWeatherHistory()
+
+function getWeatherHistory() {
+    var storage = JSON.parse(localStorage.getItem('weatherHistory'))
+    if (storage === null) {
+        document.querySelector('.history').textContent = ''
+    } else {
+        document.querySelector('.history').textContent = ''
+        for (var i = 0; i < storage.length; i++) {
+            var historyBtn = document.createElement('button')
+            historyBtn.textContent = storage[i]
+            document.querySelector('.history').append(historyBtn)
+
+            historyBtn.addEventListener('click', function (event) {
+                getCurrentWeather(event.target.textContent)
+            })
+        }
+    }
+}
 
 function getCurrentWeather(value) {
     fetch('https://api.openweathermap.org/data/2.5/weather?q=' + value + '&units=imperial&appid=' + API_KEY)
@@ -28,12 +59,23 @@ function getCurrentWeather(value) {
 }
 
 function getFiveDayWeather(lat, lon) {
+    fiveContainer.textContent = ''
     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=' + API_KEY)
         .then(res => res.json())
         .then(data => {
             console.log(data);
 
             document.querySelector('.uvi').textContent = 'UV Index: ' + data.current.uvi
+
+            if (data.current.uvi < 3) {
+                document.querySelector('.uvi').style.background = 'green'
+            }
+            else if (data.current.uvi > 3 && data.current.uvi < 7) {
+                document.querySelector('.uvi').style.background = 'orange'
+            } else {
+                document.querySelector('.uvi').style.background = 'red'
+            }
+
 
             for (var i = 0; i < 5; i++) {
                 var card = document.createElement('div')
