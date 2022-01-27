@@ -1,0 +1,37 @@
+.container{
+    width: 100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 250px auto;
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+.item-a{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+.current-container{
+    border: 1px solid black;
+}
+.search-btn{
+    min-width: 100%;
+    display: block;
+    color: white;
+    background-color: blue;
+    margin: 6px 0px;
+}
+.history button{
+    min-width: 100%;
+    display: block;
+    color: black;
+    background-color: gray;
+    margin: 6px 0px;
+}
+.five-day-container div{
+    background-color: darkgray;
+    color: white;
+    display: inline-block;
+}

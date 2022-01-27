@@ -28,6 +28,9 @@ function getWeatherHistory() {
     } else {
         document.querySelector('.history').textContent = ''
         for (var i = 0; i < storage.length; i++) {
+            if(!storage[i]){
+                continue
+            }
             var historyBtn = document.createElement('button')
             historyBtn.textContent = storage[i]
             document.querySelector('.history').append(historyBtn)
@@ -48,13 +51,13 @@ function getCurrentWeather(value) {
             var lat = data.coord.lat
             var lon = data.coord.lon
             getFiveDayWeather(lat, lon)
-
-            document.querySelector('.city-name').textContent = data.name
+const today=moment().format("M/D/YYYY") 
+            document.querySelector('.city-name').textContent = data.name + ' (' + today + ')'
             document.querySelector('.temp').textContent = 'Temp: ' + data.main.temp + ' F'
             //hum
-            document.querySelector('.humidity').textContent = data.main.humidity
+            document.querySelector('.humidity').textContent = 'Humidity: ' + data.main.humidity
             //wind
-            document.querySelector('.wind').textContent = data.wind.speed
+            document.querySelector('.wind').textContent = 'Wind: ' + data.wind.speed
         })
 }
 
