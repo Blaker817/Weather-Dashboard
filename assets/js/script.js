@@ -28,7 +28,7 @@ function getWeatherHistory() {
     } else {
         document.querySelector('.history').textContent = ''
         for (var i = 0; i < storage.length; i++) {
-            if(!storage[i]){
+            if (!storage[i]) {
                 continue
             }
             var historyBtn = document.createElement('button')
@@ -47,17 +47,21 @@ function getCurrentWeather(value) {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-
+            const icon = data.weather[0].icon
+            console.log(icon)
             var lat = data.coord.lat
             var lon = data.coord.lon
             getFiveDayWeather(lat, lon)
-const today=moment().format("M/D/YYYY") 
+            const today = moment().format("M/D/YYYY")
             document.querySelector('.city-name').textContent = data.name + ' (' + today + ')'
             document.querySelector('.temp').textContent = 'Temp: ' + data.main.temp + ' F'
             //hum
             document.querySelector('.humidity').textContent = 'Humidity: ' + data.main.humidity
             //wind
             document.querySelector('.wind').textContent = 'Wind: ' + data.wind.speed
+
+            document.querySelector('.icon').src = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+
         })
 }
 
@@ -85,8 +89,14 @@ function getFiveDayWeather(lat, lon) {
                 fiveContainer.append(card)
 
                 var date = document.createElement('h2')
-                date.textContent = moment().add(i + 1, 'days').format('dddd')
+                date.textContent = moment().add(i + 1, 'days').format("M/D/YYYY")
                 card.append(date)
+
+                const icon = data.daily[i + 1].weather[0].icon
+                var img = document.createElement('img')
+                img.src = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
+
+                card.append(img)
 
                 var fiveTemp = document.createElement('p')
                 fiveTemp.textContent = 'Temp: ' + data.daily[i + 1].temp.day + ' F'
@@ -103,4 +113,8 @@ function getFiveDayWeather(lat, lon) {
 
             }
         })
+    var h3 = document.getElementById('5dayh')
+    h3.style.visibility = 'visible'
+    var currentContainer = document.getElementById('current-container')
+    currentContainer.style.visibility = 'visible'
 }
